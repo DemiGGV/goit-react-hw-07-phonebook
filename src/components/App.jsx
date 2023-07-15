@@ -31,16 +31,11 @@ export const App = () => {
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
   const selectedContacts = useSelector(selectVisibleContacts);
-  // const first = useRef(true);
 
   useEffect(() => {
     if (!!error) {
       toast.error(error, toastOpts);
     }
-    // if (first.current) {
-    //   first.current = !first.current;
-    //   return;
-    // }
     dispatch(fetchContacts());
   }, [dispatch, error]);
 
