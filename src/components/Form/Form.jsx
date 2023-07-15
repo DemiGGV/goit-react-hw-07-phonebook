@@ -1,53 +1,71 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
-import { FormContainerCSS, FormInputCSS } from '../MainContainerCSS';
-import { getContacts } from 'redux/selectors';
+import { ErrorMessage, Formik } from 'formik';
+import * as Yup from 'yup';
+
+import {
+  FormContainerCSS,
+  FieldInputCSS,
+  ErrorField,
+  LabelDiv,
+} from '../MainContainerCSS';
+import { selectContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations';
+import { setError } from 'redux/contactsSlice';
 
 export const Form = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
-  const handleSubmit = evt => {
-    evt.preventDefault();
-    const {
-      elements: { name, number },
-    } = evt.currentTarget;
+  const handleSubmit = (value, { resetForm }) => {
+    const { name, number } = value;
     if (
       contacts.find(
-        contact =>
-          contact.name.toLowerCase() === name.value.trim().toLowerCase()
+        contact => contact.name.toLowerCase() === name.trim().toLowerCase()
       )
     ) {
-      alert(`${name.value.trim()} is already in contacts!`);
+      dispatch(setError(`${name.trim()} already in contacts!`));
       return;
     }
-    dispatch(addContact(name.value.trim(), number.value.trim()));
-    evt.currentTarget.reset();
+    dispatch(
+      addContact({
+        name: name.trim(),
+        phone: number.trim(),
+      })
+    );
+    resetForm();
   };
 
+  const SignupSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(3, 'Too Short!')
+      .max(30, 'Too Long!')
+      .required('Required'),
+    number: Yup.string()
+      .min(5, 'Too Short!')
+      .max(15, 'Too Long!')
+      .required('Required'),
+  });
+
   return (
-    <FormContainerCSS onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <FormInputCSS
-          type="text"
-          name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-        />
-      </label>
-      <label>
-        Number:
-        <FormInputCSS
-          type="tel"
-          name="number"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-        />
-      </label>
-      <button type="submit">Add contact</button>
-    </FormContainerCSS>
+    <Formik
+      initialValues={{
+        name: '',
+        number: '',
+      }}
+      validationSchema={SignupSchema}
+      onSubmit={handleSubmit}
+    >
+      <FormContainerCSS>
+        <LabelDiv>
+          <FieldInputCSS type="text" name="name" />
+          <ErrorMessage component={ErrorField} name="name" />
+        </LabelDiv>
+        <LabelDiv>
+          <FieldInputCSS type="tel" name="number" />
+          <ErrorMessage component={ErrorField} name="number" />
+        </LabelDiv>
+        <button type="submit">Add contact</button>
+      </FormContainerCSS>
+    </Formik>
   );
 };

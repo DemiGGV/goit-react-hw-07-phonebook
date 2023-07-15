@@ -1,12 +1,11 @@
-import { FormInputCSS } from 'components/MainContainerCSS';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from 'redux/filterSlice';
-import { getContacts, getFilter } from 'redux/selectors';
+import { selectContacts, selectFilter } from 'redux/selectors';
+import { FormInputCSS } from 'components/MainContainerCSS';
 
 export const Filter = () => {
-  const filter = useSelector(getFilter);
-  const contacts = useSelector(getContacts);
-  const isDisabled = !contacts.length;
+  const filter = useSelector(selectFilter);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const handleChange = evt => {
@@ -20,10 +19,9 @@ export const Filter = () => {
       <FormInputCSS
         type="text"
         name="filter"
-        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        title="Search by name"
         required
-        disabled={isDisabled}
+        disabled={!contacts.length}
         value={filter}
         onChange={handleChange}
       />
