@@ -4,7 +4,7 @@ import {
   selectVisibleContacts,
 } from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { fetchContacts } from 'redux/operations';
 import ScrollToTop from 'react-scroll-to-top';
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,16 +31,16 @@ export const App = () => {
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
   const selectedContacts = useSelector(selectVisibleContacts);
-  const first = useRef(true);
+  // const first = useRef(true);
 
   useEffect(() => {
     if (!!error) {
       toast.error(error, toastOpts);
     }
-    if (first.current) {
-      first.current = !first.current;
-      return;
-    }
+    // if (first.current) {
+    //   first.current = !first.current;
+    //   return;
+    // }
     dispatch(fetchContacts());
   }, [dispatch, error]);
 
