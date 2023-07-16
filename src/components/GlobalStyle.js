@@ -80,11 +80,13 @@ export const GlobalStyle = css`
 
   li {
     margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 15px;
-    max-width: 350px;
+    max-width: 400px;
     width: 100%;
   }
 

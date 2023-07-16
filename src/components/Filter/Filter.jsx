@@ -15,7 +15,7 @@ export const Filter = () => {
 
   return (
     <label>
-      Filter by Name:
+      Filter by Name/Phone - enter letters/numbers:
       <FormInputCSS
         type="text"
         name="filter"
