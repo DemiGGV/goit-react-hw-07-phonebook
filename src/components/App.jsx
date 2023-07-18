@@ -1,19 +1,19 @@
-import {
-  selectError,
-  selectIsLoading,
-  selectVisibleContacts,
-} from 'redux/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchContacts } from 'redux/operations';
-import ScrollToTop from 'react-scroll-to-top';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ScrollToTop from 'react-scroll-to-top';
 import { Loader } from './Loader/Loader';
 import { Form } from './Form/Form';
 import { Filter } from './Filter/Filter';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Title, ContainerCSS } from './MainContainerCSS';
+import {
+  selectError,
+  selectIsLoading,
+  selectVisibleContacts,
+} from 'redux/selectors';
+import { fetchContacts } from 'redux/operations';
 
 const toastOpts = {
   position: 'top-right',

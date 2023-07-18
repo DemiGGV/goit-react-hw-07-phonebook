@@ -15,11 +15,11 @@ export const Filter = () => {
 
   return (
     <label>
-      Filter by Name/Phone - enter letters/numbers:
+      Filter by: use "chars" OR "numbers"...
       <FormInputCSS
         type="text"
         name="filter"
-        title="Search by name"
+        title="Search"
         required
         disabled={!contacts.length}
         value={filter}

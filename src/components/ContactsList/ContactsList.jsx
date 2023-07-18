@@ -1,12 +1,18 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact } from 'redux/operations';
 import { List } from 'components/MainContainerCSS';
+import { selectCurrentID, selectIsDeleting } from 'redux/selectors';
+import { setCurrentID } from 'redux/contactsSlice';
 
 export const ContactsList = ({ contacts }) => {
   const dispatch = useDispatch();
+  const isDeleting = useSelector(selectIsDeleting);
+  const currentID = useSelector(selectCurrentID);
   const handleClick = evt => {
-    dispatch(deleteContact(evt.target.dataset.id));
+    const currentID = evt.target.dataset.id;
+    dispatch(setCurrentID(currentID));
+    dispatch(deleteContact(currentID));
   };
 
   return (
@@ -14,7 +20,12 @@ export const ContactsList = ({ contacts }) => {
       {contacts.map(contact => (
         <li key={contact.id}>
           {contact.name}: <span>{contact.phone}</span>
-          <button type="button" data-id={contact.id} onClick={handleClick}>
+          <button
+            type="button"
+            disabled={isDeleting && currentID === contact.id}
+            data-id={contact.id}
+            onClick={handleClick}
+          >
             Delete
           </button>
         </li>
